@@ -1,21 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+// import store from './store'
+import AddTodo from './components/addTodo/index';
+import actions from './actions/actions';
+import TodoList from './components/todolist/index'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+
+export const App = ({submitTodo, todos}) => (
+  <div>
+    <h1> CC Todo</h1>
+    <AddTodo submitTodo={submitTodo}/>
+    <TodoList todos={todos} />
+  </div>
+);
+App.PropsTypes = {
+  submitTodo: PropTypes.func.isRequired,
 }
 
-export default App;
+const mapStateToProps = state => state.todos;
+
+const mapDispatchToProps = dispatch => ({
+  submitTodo: text => {
+    if(text) {
+      dispatch(actions.submitTodo(text));
+    }
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
